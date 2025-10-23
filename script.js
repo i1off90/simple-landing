@@ -101,10 +101,15 @@ form?.addEventListener('submit', async (e) => {
         showStatus('Заявка отправлена! Я скоро с вами свяжусь.', 'success');
         form.reset();
         setTimeout(closeModal, 1000);
-    }
-
-    catch (err) {
+    } catch (err) {
         console.error(err);
         showStatus('Не удалось отправить. Попробуйте позже.', 'error');
     }
+
+     try {
+        gtag && gtag('event', 'lead_submit', {
+            method: 'modal_form' });
+    } catch(e) {}
+
+
 });
