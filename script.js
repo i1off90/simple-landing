@@ -6,7 +6,8 @@ const burger = $('.burger');
 const nav = $('#primary-nav');
 
 if (burger && nav) {
-    burger.addEventListener('click', () => {
+    burger.addEventListener('click', (e) => {
+        e.stopPropagation();
         const isOpen = nav.classList.toggle('open');
         burger.setAttribute('aria-expanded', String(isOpen));
     });
