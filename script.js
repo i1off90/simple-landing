@@ -8,7 +8,7 @@ const nav = $('#primary-nav');
 if (burger && nav) {
     burger.addEventListener('click', () => {
         const isOpen = nav.classList.toggle('open');
-        burger.setAttribute('aria-expanded', Strin(isOpen));
+        burger.setAttribute('aria-expanded', String(isOpen));
     });
 
     // Clossing menu in click
