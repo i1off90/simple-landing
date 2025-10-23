@@ -33,16 +33,16 @@ function openModal() {
 
 function closeModal() {
     if (!modal) return;
-    modal.hiden = true;
+    modal.hidden = true;
     document.body.style.overflow = '';
 }
 
 // Open modal
-modal?.addEventListener('click', openModal);
+openModalBtn?.addEventListener('click', openModal);
 
 // Close modal on 'x' or background
 modal?.addEventListener('click', (e) => {
-    if (e.target.matches('[data-cloes]')) closeModal();
+    if (e.target.matches('[data-close]')) closeModal();
 });
 
 // Close by ESC
