@@ -56,6 +56,7 @@ document.addEventListener('keydown', (e) => {
 // Form: validation and sending
 const form = $('#lead-form');
 const statusEl = $('.form-status');
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xovkgago';
 
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).toLowerCase());
@@ -90,10 +91,10 @@ form?.addEventListener('submit', async (e) => {
     showStatus('Отправка...', 'info');
 
     try {
-        const res = await fetch('https://httpbin.org/post', {
+        const res = await fetch(FORMSPREE_ENDPOINT, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, message, source: 'simple-landing' }),
+            headers: { Accept: 'application/json' },
+            body: new FormData(form)
         });
 
         if (!res.ok) throw new Error('Network error');
