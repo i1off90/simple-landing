@@ -56,7 +56,8 @@ document.addEventListener('keydown', (e) => {
 // Form: validation and sending
 const form = $('#lead-form');
 const statusEl = $('.form-status');
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xovkgago';
+// const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xovkgago';
+const MAKE_WEBHOOK = 'https://hook.eu2.make.com/k45xljhphabkfm96fo670btca0o88jmw';
 
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).toLowerCase());
@@ -91,10 +92,13 @@ form?.addEventListener('submit', async (e) => {
     showStatus('Отправка...', 'info');
 
     try {
-        const res = await fetch(FORMSPREE_ENDPOINT, {
+        const res = await fetch(MAKE_WEBHOOK, {
             method: 'POST',
-            headers: { Accept: 'application/json' },
-            body: new FormData(form)
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name, email, message,
+                source: 'modal_form_vercel'
+            }),
         });
 
         if (!res.ok) throw new Error('Network error');
