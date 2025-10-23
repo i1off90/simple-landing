@@ -97,7 +97,7 @@ form?.addEventListener('submit', async (e) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name, email, message,
-                source: 'modal_form_vercel'
+                source: '${location.hostname}${location.pathname}'
             }),
         });
 
