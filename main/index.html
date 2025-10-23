@@ -15,7 +15,10 @@
   <a class="skip-link" href="#main">
   <header class="container header">
     <div class="logo">MySite</div>
-    <nav class="nav">
+    <button class="burger" aria-label="Открыть меню" aria-controls="primary-nav" aria-expanded="false">
+      ☰
+    </button>
+    <nav id="primary-nav" class="nav" aria-label="Основная навигация">
       <a href="#features">Преимущества</a>
       <a href="#contact">Контакты</a>
     </nav>
@@ -24,7 +27,7 @@
   <section class="hero container">
     <h1>Быстрые сайты и автоматизация</h1>
     <p>Делаю лендинги и подключаю заявки к таблицам и почте.</p>
-    <a class="btn" href="#contact">Оставить заявку</a>
+    <button class="btn open-modal" type="button">Оставить заявку</button>
   </section>
 
   <section id="features" class="features container">
@@ -47,5 +50,32 @@
     <p>© 2025. Riga, LV</p>
   </footer>
   </a>
+
+  <!-- Модалка -->
+   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="model-title" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__content" role="document">
+      <button class="modal__close" aria-label="Закрыть" data-close>×</button>
+      <h2 id="modal-title">Оставить заявку</h2>
+      <form id="lead-form" novalidate>
+        <label>
+          Имя
+          <input type="text" name="name" required placeholder="Ваше имя" />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" required placeholder="you@example.com" />
+        </label>
+        <label>
+          Сообщение
+          <textarea name="message" rows="4" required placeholder="Коротко опишите задачу"></textarea>
+        </label>
+        <button class="btn" type="submit">Отправить</button>
+        <p class="form-status" aria-live="polite"></p>
+      </form>
+    </div>
+   </div>
+
+   <script src="/main/script.js" defer></script>
 </body>
 </html>
