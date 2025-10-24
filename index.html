@@ -8,7 +8,7 @@
   <meta property="og:description" content="Быстрые сайты, адаптив, заявки в таблицы и почту." />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="ru_RU" />
-  <title>Простой лендинг</title>
+  <title data-i18n="title">Простой лендинг</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="canonical" href="https://simple-landing-eta.vercel.app/">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KLSG7TBCNS"></script>
@@ -22,42 +22,36 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="container header">
-    <div class="logo">Mysite</div>
+    <div class="logo" data-i18n="logo">My site</div>
     <button class="burger" aria-label="Открыть меню" aria-controls="primary-nav" aria-expanded="false">
       ☰
     </button>
     <nav id="primary-nav" class="nav" aria-label="Основная навигация">
-      <a href="#features">Преимущества</a>
-      <a href="#contact">Контакты</a>
+      <a href="#features" data-i18n="nav.features">Преимущества</a>
+      <a href="#contact" data-i18n="nav.contact">Контакты</a>
     </nav>
   </header>
 
   <main id="main">
     <section class="hero container">
-      <h1>Быстрые сайты и автоматизация</h1>
-      <p>Делаю лендинги и подключаю заявки к таблицам и почте.</p>
-      <button class="btn open-modal" type="button">Оставить заявку</button>
+      <h1 data-i18n="hero.title">Надпись на герое</h1>
+      <p data-i18n="hero.subtitle">Короткое описание ценности</p>
+      <button class="btn open-modal" type="button" data-i18n="hero.cta">Оставить заявку</button>
     </section>
 
     <section id="features" class="features container">
-      <article class="card">
-        <h3>Скорость</h3>
-        <p>Запуск за 3 - 5 дней.</p>
-      </article>
-      <article class="card">
-        <h3>Адаптив</h3>
-        <p>Корректно на телефонах и ПК.</p>
-      </article>
-      <article class="card">
-        <h3>Интеграции</h3>
-        <p>Заявки в Google Sheets/почту.</p>
-      </article>
+      <h2 data-i18n="features.title">Преимущества</h2>
+      <ul>
+        <li data-i18n="features.item1">Быстрый деплой</li>
+        <li data-i18n="features.item2">Автоматизация заявок</li>
+        <li data-i18n="features.item3">Подключенная аналитика</li>
+      </ul>
     </section>
   </main>
 
   <section id="contact" class="container contact">
-    <h2>Контакты</h2>
-    <p>Напишите мне на email или в мессенджеры - отвечаю в течении дня.</p>
+    <h2 data-i18n="contact.title">Контакты</h2>
+    <p data-i18n="contact.text">Напишите мне - отвечаю в течении дня.</p>
     <ul class="contact-list">
       <li><a href="mailto:ioneoff90@gmail.com">Gmail</a></li>
       <li><a href="https://t.me/i_1off" target="_blank" rel="noopener">Telegram</a></li>
@@ -75,21 +69,21 @@
   <div class="modal__backdrop" data-close></div>
   <div class="modal__content" role="document">
     <button class="modal__close" aria-label="Закрыть" data-close>×</button>
-    <h2 id="modal-title">Оставить заявку</h2>
+    <h2 id="modal-title" data-i18n="form.title">Оставить заявку</h2>
     <form id="lead-form" novalidate>
       <label>
-        Имя
+        <span data-i18n="form.name">Имя</span>
         <input type="text" name="name" required placeholder="Ваше имя" />
       </label>
       <label>
-        Email
+        <span data-i18n="form.email">Email</span>
         <input type="email" name="email" required placeholder="you@example.com" />
       </label>
       <label>
-        Сообщение
+        <span data-i18n="form.message">Сообщение</span>
         <textarea name="message" rows="4" placeholder="Коротко опишите задачу"></textarea>
       </label>
-      <button class="btn" type="submit">Отправить</button>
+      <button class="btn" type="submit" data-i18n="form.submit">Отправить</button>
       <p class="form-status" aria-live="polite"></p>
     </form>
   </div>

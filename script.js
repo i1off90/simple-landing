@@ -91,13 +91,23 @@ form?.addEventListener('submit', async (e) => {
 
     showStatus('Отправка...', 'info');
 
+    const params = new URLSearchParams(location.search);
+    const hasUtm = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].some(k => params.get(k));
+    const currentLang = localStorage.getItem('site_lang') || document.documentElement.lang || 'ru';
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+    const computedSource = hasUtm
+        ? `utm?${['utm_source','utm_medium','utm_campaign','utm_term','utm_content']
+            .map(k => `${k}=${params.get(k)||''}`).join('&')}`
+        : `${location.hostname}${location.pathname}|${currentLang}|${isMobile ? 'mobile' : 'desktop'}`;
+
     try {
         const res = await fetch(MAKE_WEBHOOK, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name, email, message,
-                source: 'Надо ответить'
+                source: computedSource
             }),
         });
 
@@ -118,3 +128,95 @@ form?.addEventListener('submit', async (e) => {
 
 
 });
+
+// i18n (RU/EN/LV)
+const i18n = {
+    ru: {
+        title: 'Простой лендинг',
+        logo: 'Мой сайт',
+        'nav.features': 'Преимущества',
+        'nav.contact': 'Контакты',
+        'hero.title': 'Headline',
+        'hero.subtitle': 'Короткое описание ценности',
+        'hero.cta': 'Оставить заявку',
+        'features.title': 'Преимущества',
+        'features.item1': 'Быстрый деплой',
+        'features.item2': 'Автоматизация заявок',
+        'features.item3': 'Подключенная аналитика',
+        'contact.title': 'Контакты',
+        'contact.text': 'Напишите мне - отвечаю в течении дня.',
+        'form.title': 'Оставить заявку',
+        'form.name': 'Имя',
+        'form.email': 'Email',
+        'form.message': 'Сообщение',
+        'form.submit': 'Отправить',
+        'form.close': 'Закрыть',
+    },
+    en: {
+        title: 'Simple landing',
+        logo: 'My Site',
+        'nav.features': 'Features',
+        'nav.contact': 'Contact',
+        'hero.title': 'Headline',
+        'hero.subtitle': 'A short value proposition',
+        'hero.cta': 'Get in touch',
+        'features.title': 'Features',
+        'features.item1': 'Fast deploy',
+        'features.item2': 'Lead automation',
+        'features.item3': 'Analytics connected',
+        'contact.title': 'Contact',
+        'contact.text': 'Write me - I reply within a day.',
+        'form.title': 'Leave a request',
+        'form.name': 'Name',
+        'form.email': 'Email',
+        'form.message': 'Message',
+        'form.submit': 'Send',
+        'form.close': 'Close',
+    },
+    lv: {
+        title: 'Vienkārša lapa',
+        logo: 'Mana lapa',
+        'nav.features': 'Priekšrocības',
+        'nav.contact': 'Kontakti',
+        'hero.title': 'Jūsu virsraksts',
+        'hero.subtitle': 'īss vērtības piedāvājums',
+        'hero.cta': 'Sazināties',
+        'features.title': 'Priekšrocības',
+        'features.item1': 'Ātra izvietošana',
+        'features.item2': 'Pieteikumu atomatizācija',
+        'features.item3': 'Pievienota analītika',
+        'contact.title': 'Kontakti',
+        'contact.text': 'Rakstiet man - atbildu dienas laikā.',
+        'form.title': 'Atstājiet pieteikumu',
+        'form.name': 'Vārds',
+        'form.email': 'E-pasts',
+        'form.message': 'Ziņa',
+        'form.submit': 'Nosūtīt',
+        'form.close': 'Aizvērt',
+    },
+};
+
+const LANG_KEY = 'site_lang';
+const langBtn = document.getElementById('lang-toggle');
+
+function applyLang(lang) {
+    const dict = i18n[lang] || i18n.ru;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
+    });
+    // Write on button - next language
+    if (langBtn) langBtn.text = lang === 'ru' ? 'EN' : lang === 'en' ? 'LV' : 'RU';
+    localStorage.setItem(LANG_KEY, lang);
+}
+
+langBtn?.addEventListener('click', () => {
+    const current = localStorage.getItem(LANG_KEY) || 'ru';
+    const next = current === 'ru' ? 'en' : current === 'en' ? 'lv' : 'ru';
+    applyLang(next);
+});
+
+// first loading - browser language
+const initial = localStorage.getItem(LANG_KEY) || (navigator.language || 'ru').slice(0,2);
+applyLang(['ru','en','lv'].includes(initial) ? initial : 'ru');
