@@ -104,14 +104,39 @@ form?.addEventListener('submit', async (e) => {
    const email = (emailInput?.value || '').trim();
    const message = (messageInput?.value || '').trim();
 
+   [nameInput, emailInput, messageInput].forEach(el => {
+    if (el) { el.style.outline = ''; el.style.borderColor = ''; }
+   });
+
    if (!name) { 
     showStatus('status.name_required', 'error');
+    if (nameInput) {
+        nameInput.focus();
+        nameInput.style.outline = '2px solid #f87171';
+        nameInput.style.borderColor = '#f87171';
+    }
     isSubmitting = false;
     return;
    }
 
    if (!isValidEmail(email)) {
     showStatus('status.email_invalid', 'error');
+    if (emailInput) {
+        emailInput.focus();
+        emailInput.style.outline = '2px solid #f87171';
+        emailInput.style.borderColor = '#f87171';
+    }
+    isSubmitting = false;
+    return;
+   }
+
+   if (!message || message.replace(/\s+/g, '').length < 5) {
+    showStatus('status.message_required', 'error');
+    if (messageInput) {
+        messageInput.focus();
+        messageInput.style.outline = '2px solid #f87171';
+        messageInput.style.borderColor = '#f87171';
+    }
     isSubmitting = false;
     return;
    }
@@ -196,6 +221,7 @@ const i18n = {
         'status.error': 'Не удалось отправить. Попробуйте позже.',
         'status.name_required': 'Укажите имя',
         'status.email_invalid': 'Некорректный email',
+        'status.message_required': 'Напишите сообщение',
     },
     en: {
         title: 'Simple landing',
@@ -228,6 +254,7 @@ const i18n = {
         'status.error': 'Failed to send. Please try again later.',
         'status.name_required': 'Please enter your name',
         'status.email_invalid': 'Invalid email address',
+        'status.message_required': 'Please enter a message',
     },
     lv: {
         title: 'Vienkārša lapa',
@@ -260,6 +287,7 @@ const i18n = {
         'status.error': 'Neizdevās nosūtīt. Lūdzu, mēģiniet vēlreiz.',
         'status.name_required': 'Ievadiet vārdu',
         'status.email_invalid': 'Nederīga e-pasta adrese',
+        'status.message_required': 'Ivadiet ziņu',
     },
 };
 
