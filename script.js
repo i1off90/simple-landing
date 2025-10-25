@@ -83,7 +83,7 @@ let isSubmitting = false;
 
 // Sending by Enter
 
-fomr?.addEventListener('keydown', (e) => {
+form?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         form.requestSubmit?.(); 
