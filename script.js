@@ -81,6 +81,15 @@ function showStatus(key, type = 'info') {
 
 let isSubmitting = false;
 
+// Sending by Enter
+
+fomr?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        form.requestSubmit?.(); 
+    }
+})
+
 form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!form) return;
@@ -110,19 +119,25 @@ form?.addEventListener('submit', async (e) => {
    showStatus('status.sending', 'info');
 
    const params = new URLSearchParams(location.search);
-   const hasUtm = ['utm_source','utm_media','utm_campaign','utm_term','utm_content'].some(k => params.get(k));
+   const utmKeys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+   const hasUtm = utmKeys.some(k => params.get(k));
    const currentLang = localStorage.getItem('site_lang') || document.documentElement.lang || 'ru';
    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
    const computedSource = hasUtm
-    ? `utm?${['utm_source','utm_media','utm_campaign','utm_term','utm_content'].map(k => 
-        `${k}=${params.get(k)||''}`).join('&')}`
-    : `${location.hostname}${location.pathname}|{currentLang}|${isMobile ? 'mobile' : 'desktop'}`;
+        ? `utm?${utmKeys.map(k => `${k}=${params.get(k) || ''}`).join('&')}`
+        : `${location.hostname}${location.pathname}|${currentLang}|${isMobile ? 'mobile' : 'desktop'}`;
 
     const payload = { name, email, message, source: computedSource };
 
-    // Diagnostik on client
+    // Diagnostic on client
     console.debug('payload ->', payload); 
+    if (!name || !email) {
+        console.warn('Stop: empty fields just before fetch', payload);
+        showStatus('status.error', 'error');
+        isSubmitting = false;
+        return;
+    }
 
     try {
         const res = await fetch(MAKE_WEBHOOK, {
@@ -227,7 +242,7 @@ const i18n = {
         'features.item1_desc': 'Vercel + tīrs HTML/CSS/JS. Palaišana 1 dienā.',
         'features.item2_desc': 'Make → Google Sheets/E-pasts/Telegram, bez servera',
         'features.item3_desc': 'GA4 notikumi: apmeklējums, lead submit.',
-        'features.item2': 'Pieteikumu atomatizācija',
+        'features.item2': 'Pieteikumu automatizācija',
         'features.item3': 'Pievienota analītika',
         'contact.title': 'Kontakti',
         'contact.text': 'Rakstiet man - atbildu dienas laikā.',
