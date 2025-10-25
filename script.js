@@ -143,6 +143,9 @@ const i18n = {
         'features.item1': 'Быстрый деплой',
         'features.item2': 'Автоматизация заявок',
         'features.item3': 'Подключенная аналитика',
+        'features.item1_desc': 'Vercel + чистый HTML/CSS/JS. Запуск за 1 день.',
+        'features.item2_desc': 'Make → Google Sheets/Email/Telegram без сервера.',
+        'features.item3_desc': 'GA4 события: посещения, lead_submit.',
         'contact.title': 'Контакты',
         'contact.text': 'Напишите мне - отвечаю в течении дня.',
         'form.title': 'Оставить заявку',
@@ -164,6 +167,9 @@ const i18n = {
         'features.item1': 'Fast deploy',
         'features.item2': 'Lead automation',
         'features.item3': 'Analytics connected',
+        'features.item1_desc': 'Vercel + plain HTML/CSS/JS. Launch in 1 day.',
+        'features.item2_desc': 'Make → Google Sheets/Email/Telegram, no server',
+        'features.item3_desc': 'GA4 events: visit, lead_submit.',
         'contact.title': 'Contact',
         'contact.text': 'Write me - I reply within a day.',
         'form.title': 'Leave a request',
@@ -178,11 +184,14 @@ const i18n = {
         logo: 'Mana lapa',
         'nav.features': 'Priekšrocības',
         'nav.contact': 'Kontakti',
-        'hero.title': 'Jūsu virsraksts',
-        'hero.subtitle': 'īss vērtības piedāvājums',
+        'hero.title': 'Headline',
+        'hero.subtitle': 'Īss vērtības piedāvājums',
         'hero.cta': 'Sazināties',
         'features.title': 'Priekšrocības',
         'features.item1': 'Ātra izvietošana',
+        'features.item1_desc': 'Vercel + tīrs HTML/CSS/JS. Palaišana 1 dienā.',
+        'features.item2_desc': 'Make → Google Sheets/E-pasts/Telegram, bez servera',
+        'features.item3_desc': 'GA4 notikumi: apmeklējums, lead submit.',
         'features.item2': 'Pieteikumu atomatizācija',
         'features.item3': 'Pievienota analītika',
         'contact.title': 'Kontakti',
@@ -207,7 +216,7 @@ function applyLang(lang) {
         if (dict[key]) el.textContent = dict[key];
     });
     // Write on button - next language
-    if (langBtn) langBtn.text = lang === 'ru' ? 'EN' : lang === 'en' ? 'LV' : 'RU';
+    if (langBtn) langBtn.textContent = lang === 'ru' ? 'EN' : lang === 'en' ? 'LV' : 'RU';
     localStorage.setItem(LANG_KEY, lang);
 }
 

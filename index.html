@@ -29,6 +29,8 @@
     <nav id="primary-nav" class="nav" aria-label="Основная навигация">
       <a href="#features" data-i18n="nav.features">Преимущества</a>
       <a href="#contact" data-i18n="nav.contact">Контакты</a>
+
+      <button id="lang-toggle" type="button" class="lang-btn">EN</button>
     </nav>
   </header>
 
@@ -41,10 +43,22 @@
 
     <section id="features" class="features container">
       <h2 data-i18n="features.title">Преимущества</h2>
-      <ul>
-        <li data-i18n="features.item1">Быстрый деплой</li>
-        <li data-i18n="features.item2">Автоматизация заявок</li>
-        <li data-i18n="features.item3">Подключенная аналитика</li>
+      <ul class="features__list">
+        <li class="card">
+          <span class="card__icon">⚡</span>
+          <h3 data-i18n="features.item1">Быстрый деплой</h3>
+          <p class="card__text" data-i18n="features.item1_desc">Vercel + чистый HTML/CSS/JS. Запуск за 1 день.</p>
+        </li>
+        <li class="card">
+          <span class="card__icon">🔗</span>
+          <h3 data-i18n="features.item2">Автоматизация заявок</h3>
+          <p class="card__text" data-i18n="features.item2_desc">Make → Google Sheets/Email/Telegram без сервера.</p>
+        </li>
+        <li class="card">
+          <span class="card__icon">📊</span>
+          <h3 data-i18n="features.item3">Подключение аналитики</h3>
+          <p class="card__text" data-i18n="features.item3_desc">GA4 события: посещения, lead_submit.</p>
+        </li>
       </ul>
     </section>
   </main>
