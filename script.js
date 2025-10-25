@@ -63,9 +63,18 @@ function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).toLowerCase());
 }
 
-function showStatus(text, type = 'info') {
+function t(key) {
+    const lang = localStorage.getItem(LANG_KEY) || document.documentElement.lang || 'ru';
+    const dict = i18n[lang] || i18n.ru;
+    return dict[key] || key;
+}
+
+let lastStatusKey = '';
+
+function showStatus(key, type = 'info') {
     if (!statusEl) return;
-    statusEl.textContent = text;
+    lastStatusKey = key;
+    statusEl.textContent = t(key);
     statusEl.style.color = 
         type === 'success' ? '#22c55e' : type === 'error' ? '#f87171' : '#94a3b8';
 }
@@ -81,15 +90,15 @@ form?.addEventListener('submit', async (e) => {
 
     // Easy validation
     if (!name) {
-        showStatus('Укажите имя', 'error');
+        showStatus('status.name_required', 'error');
         return;
     }
     if (!isValidEmail(email)) {
-        showStatus('Некорректный email', 'error');
+        showStatus('status.email_invalid', 'error');
         return;
     }
 
-    showStatus('Отправка...', 'info');
+    showStatus('status.sending', 'info');
 
     const params = new URLSearchParams(location.search);
     const hasUtm = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].some(k => params.get(k));
@@ -113,12 +122,12 @@ form?.addEventListener('submit', async (e) => {
 
         if (!res.ok) throw new Error('Network error');
 
-        showStatus('Заявка отправлена! Я скоро с вами свяжусь.', 'success');
+        showStatus('status.success', 'success');
         form.reset();
         setTimeout(closeModal, 1000);
     } catch (err) {
         console.error(err);
-        showStatus('Не удалось отправить. Попробуйте позже.', 'error');
+        showStatus('status.error', 'error');
     }
 
      try {
@@ -157,11 +166,11 @@ const i18n = {
         'form.message_ph': 'Коротко опишите задачу',
         'form.submit': 'Отправить',
         'form.close': 'Закрыть',
-        'status.sending': 'Sending...',
-        'status.success': 'Request sent! I will contact you soon',
-        'status.error': 'Failed to send. Please try again later',
-        'status.name_required': 'Please enter your name',
-        'status.email_invalid': 'Invalid email address',
+        'status.sending': 'Отправка...',
+        'status.success': 'Заявка отправлена! Я скоро с вами свяжусь.',
+        'status.error': 'Не удалось отправить. Попробуйте позже.',
+        'status.name_required': 'Укажите имя',
+        'status.email_invalid': 'Некорректный email',
     },
     en: {
         title: 'Simple landing',
@@ -190,8 +199,8 @@ const i18n = {
         'form.submit': 'Send',
         'form.close': 'Close',
         'status.sending': 'Sending...',
-        'status.success': 'Request sent! I will contact you soon',
-        'status.error': 'Failed to send. Please try again later',
+        'status.success': 'Request sent! I will contact you soon.',
+        'status.error': 'Failed to send. Please try again later.',
         'status.name_required': 'Please enter your name',
         'status.email_invalid': 'Invalid email address',
     },
@@ -221,6 +230,11 @@ const i18n = {
         'form.message_ph': 'Īsi aprakstiet uzdevumu',
         'form.submit': 'Nosūtīt',
         'form.close': 'Aizvērt',
+        'status.sending': 'Sūtīšana...',
+        'status.success': 'Pieteikums nosūtīts! Es drīzumā sazināšos.',
+        'status.error': 'Neizdevās nosūtīt. Lūdzu, mēģiniet vēlreiz.',
+        'status.name_required': 'Ievadiet vārdu',
+        'status.email_invalid': 'Nederīga e-pasta adrese',
     },
 };
 
@@ -248,6 +262,8 @@ function applyLang(lang) {
     // Write on button - next language
     if (langBtn) langBtn.textContent = lang === 'ru' ? 'EN' : lang === 'en' ? 'LV' : 'RU';
     localStorage.setItem(LANG_KEY, lang);
+
+    if (statusEl && lastStatusKey) statusEl.textContent = t(lastStatusKey);
 }
 
 langBtn?.addEventListener('click', () => {
