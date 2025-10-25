@@ -79,48 +79,58 @@ function showStatus(key, type = 'info') {
         type === 'success' ? '#22c55e' : type === 'error' ? '#f87171' : '#94a3b8';
 }
 
+let isSubmitting = false;
+
 form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!form) return;
+    if (isSubmitting) return;
+    isSubmitting = true;
 
-    const formData = new FormData(form);
-    const name = (formData.get('name') || '').toString().trim();
-    const email = (formData.get('email') || '').toString().trim();
-    const message = (formData.get('message') || '').toString().trim();
+   const nameInput = form.querySelector('input[name="name"]');
+   const emailInput = form.querySelector('input[name="email"]');
+   const messageInput = form.querySelector('textarea[name="message"]');
 
-    // Easy validation
-    if (!name) {
-        showStatus('status.name_required', 'error');
-        return;
-    }
-    if (!isValidEmail(email)) {
-        showStatus('status.email_invalid', 'error');
-        return;
-    }
+   const name = (nameInput?.value || '').trim();
+   const email = (emailInput?.value || '').trim();
+   const message = (messageInput?.value || '').trim();
 
-    showStatus('status.sending', 'info');
+   if (!name) { 
+    showStatus('status.name_required', 'error');
+    isSubmitting = false;
+    return;
+   }
 
-    const params = new URLSearchParams(location.search);
-    const hasUtm = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].some(k => params.get(k));
-    const currentLang = localStorage.getItem('site_lang') || document.documentElement.lang || 'ru';
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+   if (!isValidEmail(email)) {
+    showStatus('status.email_invalid', 'error');
+    isSubmitting = false;
+    return;
+   }
 
-    const computedSource = hasUtm
-        ? `utm?${['utm_source','utm_medium','utm_campaign','utm_term','utm_content']
-            .map(k => `${k}=${params.get(k)||''}`).join('&')}`
-        : `${location.hostname}${location.pathname}|${currentLang}|${isMobile ? 'mobile' : 'desktop'}`;
+   showStatus('status.sending', 'info');
+
+   const params = new URLSearchParams(location.search);
+   const hasUtm = ['utm_source','utm_media','utm_campaign','utm_term','utm_content'].some(k => params.get(k));
+   const currentLang = localStorage.getItem('site_lang') || document.documentElement.lang || 'ru';
+   const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+   const computedSource = hasUtm
+    ? `utm?${['utm_source','utm_media','utm_campaign','utm_term','utm_content'].map(k => 
+        `${k}=${params.get(k)||''}`).join('&')}`
+    : `${location.hostname}${location.pathname}|{currentLang}|${isMobile ? 'mobile' : 'desktop'}`;
+
+    const payload = { name, email, message, source: computedSource };
+
+    // Diagnostik on client
+    console.debug('payload ->', payload); 
 
     try {
         const res = await fetch(MAKE_WEBHOOK, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name, email, message,
-                source: computedSource
-            }),
+            body: JSON.stringify(payload),
         });
-
-        if (!res.ok) throw new Error('Network error');
+        if (!res.ok) throw new Error(`Network error ${res.status}`);
 
         showStatus('status.success', 'success');
         form.reset();
@@ -128,14 +138,14 @@ form?.addEventListener('submit', async (e) => {
     } catch (err) {
         console.error(err);
         showStatus('status.error', 'error');
+    } finally {
+        isSubmitting = false;
     }
 
-     try {
+    try { 
         gtag && gtag('event', 'lead_submit', {
             method: 'modal_form' });
     } catch(e) {}
-
-
 });
 
 // i18n (RU/EN/LV)
