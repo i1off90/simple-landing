@@ -152,8 +152,16 @@ const i18n = {
         'form.name': 'Имя',
         'form.email': 'Email',
         'form.message': 'Сообщение',
+        'form.name_ph': 'Имя',
+        'form.email_ph': 'you@example.com',
+        'form.message_ph': 'Коротко опишите задачу',
         'form.submit': 'Отправить',
         'form.close': 'Закрыть',
+        'status.sending': 'Sending...',
+        'status.success': 'Request sent! I will contact you soon',
+        'status.error': 'Failed to send. Please try again later',
+        'status.name_required': 'Please enter your name',
+        'status.email_invalid': 'Invalid email address',
     },
     en: {
         title: 'Simple landing',
@@ -176,8 +184,16 @@ const i18n = {
         'form.name': 'Name',
         'form.email': 'Email',
         'form.message': 'Message',
+        'form.name_ph': 'Name',
+        'form.email_ph': 'you@example.com',
+        'form.message_ph': 'Briefly describe your task',
         'form.submit': 'Send',
         'form.close': 'Close',
+        'status.sending': 'Sending...',
+        'status.success': 'Request sent! I will contact you soon',
+        'status.error': 'Failed to send. Please try again later',
+        'status.name_required': 'Please enter your name',
+        'status.email_invalid': 'Invalid email address',
     },
     lv: {
         title: 'Vienkārša lapa',
@@ -200,6 +216,9 @@ const i18n = {
         'form.name': 'Vārds',
         'form.email': 'E-pasts',
         'form.message': 'Ziņa',
+        'form.name_ph': 'Jūsu vārds',
+        'form.email_ph': 'you@example.com',
+        'form.message_ph': 'Īsi aprakstiet uzdevumu',
         'form.submit': 'Nosūtīt',
         'form.close': 'Aizvērt',
     },
@@ -211,10 +230,21 @@ const langBtn = document.getElementById('lang-toggle');
 function applyLang(lang) {
     const dict = i18n[lang] || i18n.ru;
     document.documentElement.lang = lang;
+
+    // Texts by data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) el.textContent = dict[key];
     });
+
+    // Placeholders forms
+    const nameInput = document.querySelector('input[name="name"]');
+    const emailInput = document.querySelector('input[name="email"]');
+    const messageInput = document.querySelector('textarea[name="message"]');
+    if (nameInput && dict['form.name_ph']) nameInput.placeholder = dict['form.name_ph'];
+    if (emailInput && dict['form.email_ph']) emailInput.placeholder = dict['form.email_ph'];
+    if (messageInput && dict['form.message_ph']) messageInput.placeholder = dict['form.message_ph'];
+
     // Write on button - next language
     if (langBtn) langBtn.textContent = lang === 'ru' ? 'EN' : lang === 'en' ? 'LV' : 'RU';
     localStorage.setItem(LANG_KEY, lang);
